@@ -8,10 +8,4 @@
     <ItemGroup>
         <PackageReference Include="LiteDB" Version="5.0.10" />
     </ItemGroup>
-
-    <ItemGroup>
-        <None Update="index.html">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
 </Project>

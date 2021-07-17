@@ -31,16 +31,15 @@ app.MapPost("/url", (UrlDto request, ILiteDatabase liteDb, HttpRequest httpReque
 });
 
 // Catch all page: redirecting shortened URL to its original address
-app.MapFallback((HttpRequest httpRequest, ILiteDatabase db) =>
+app.MapFallback((string path, ILiteDatabase db) =>
 {
     var collection = db.GetCollection<ShortUrl>();
 
-    var path = httpRequest.Path.ToUriComponent().Trim('/');
     var id = BitConverter.ToInt32(WebEncoders.Base64UrlDecode(path));
     var entry = collection.Find(p => p.Id == id).FirstOrDefault();
 
     return Results.Redirect(entry?.Url ?? "/");
-}); 
+});
 
 app.Run();
 
