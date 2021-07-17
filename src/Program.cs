@@ -34,10 +34,16 @@ app.MapPost("/url", (UrlDto request, ILiteDatabase liteDb, HttpRequest httpReque
 app.MapFallback((string path, ILiteDatabase db) =>
 {
     var collection = db.GetCollection<ShortUrl>();
+    byte[] base64 = WebEncoders.Base64UrlDecode(path);
+    
+    if (base64.Length != 4)
+    {
+        // Not an integer
+        return Results.Redirect("/");
+    }
 
-    var id = BitConverter.ToInt32(WebEncoders.Base64UrlDecode(path));
+    var id = BitConverter.ToInt32(base64);
     var entry = collection.Find(p => p.Id == id).FirstOrDefault();
-
     return Results.Redirect(entry?.Url ?? "/");
 });
 
